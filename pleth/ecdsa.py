@@ -27,12 +27,11 @@ def sign(prikey: pleth.secp256k1.Fr, m: pleth.secp256k1.Fr) -> typing.Tuple[plet
 def verify(pubkey: pleth.secp256k1.Pt, m: pleth.secp256k1.Fr, r: pleth.secp256k1.Fr, s: pleth.secp256k1.Fr) -> bool:
     # https://www.secg.org/sec1-v2.pdf
     # 4.1.4 Verifying Operation
-    u1 = m / s
-    u2 = r / s
-    x = pleth.secp256k1.G * u1 + pubkey * u2
-    assert x != pleth.secp256k1.I
-    v = pleth.secp256k1.Fr(x.x.x)
-    return v == r
+    a = m / s
+    b = r / s
+    R = pleth.secp256k1.G * a + pubkey * b
+    assert R != pleth.secp256k1.I
+    return r == pleth.secp256k1.Fr(R.x.x)
 
 
 def pubkey(m: pleth.secp256k1.Fr, r: pleth.secp256k1.Fr, s: pleth.secp256k1.Fr, v: int) -> pleth.secp256k1.Pt:
@@ -43,8 +42,8 @@ def pubkey(m: pleth.secp256k1.Fr, r: pleth.secp256k1.Fr, s: pleth.secp256k1.Fr, 
         x = pleth.secp256k1.Fq(r.x)
     else:
         x = pleth.secp256k1.Fq(r.x + pleth.secp256k1.N)
-    y_y = x * x * x + pleth.secp256k1.A * x + pleth.secp256k1.B
-    y = y_y ** ((pleth.secp256k1.P + 1) // 4)
+    z = x * x * x + pleth.secp256k1.A * x + pleth.secp256k1.B
+    y = z ** ((pleth.secp256k1.P + 1) // 4)
     if v & 1 != y.x & 1:
         y = -y
     R = pleth.secp256k1.Pt(x, y)
