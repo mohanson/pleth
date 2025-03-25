@@ -18,11 +18,11 @@ class PriKey:
     def __init__(self, n: int) -> None:
         self.n = n
 
-    def __repr__(self) -> str:
-        return json.dumps(self.json())
-
     def __eq__(self, other) -> bool:
         return self.n == other.n
+
+    def __repr__(self) -> str:
+        return json.dumps(self.json())
 
     def json(self) -> typing.Dict:
         return {
@@ -62,14 +62,14 @@ class PubKey:
         self.x = x
         self.y = y
 
-    def __repr__(self) -> str:
-        return json.dumps(self.json())
-
     def __eq__(self, other) -> bool:
         return all([
             self.x == other.x,
             self.y == other.y,
         ])
+
+    def __repr__(self) -> str:
+        return json.dumps(self.json())
 
     def addr(self) -> bytearray:
         b = bytearray()
@@ -114,11 +114,11 @@ class TxLegacy:
         self.r = 0
         self.s = 0
 
-    def __repr__(self) -> str:
-        return json.dumps(self.json())
-
     def __eq__(self, other) -> bool:
         return self.hash() == other.hash()
+
+    def __repr__(self) -> str:
+        return json.dumps(self.json())
 
     def envelope(self) -> bytearray:
         return pleth.rlp.encode([
@@ -192,11 +192,11 @@ class TxAccessList:
         self.r = 0
         self.s = 0
 
-    def __repr__(self) -> str:
-        return json.dumps(self.json())
-
     def __eq__(self, other) -> bool:
         return self.hash() == other.hash()
+
+    def __repr__(self) -> str:
+        return json.dumps(self.json())
 
     def envelope(self) -> bytearray:
         return bytearray([0x01]) + pleth.rlp.encode([
@@ -277,11 +277,11 @@ class TxDynamicFee:
         self.r = 0
         self.s = 0
 
-    def __repr__(self) -> str:
-        return json.dumps(self.json())
-
     def __eq__(self, other) -> bool:
         return self.hash() == other.hash()
+
+    def __repr__(self) -> str:
+        return json.dumps(self.json())
 
     def envelope(self) -> bytearray:
         return bytearray([0x02]) + pleth.rlp.encode([
