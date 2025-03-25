@@ -39,7 +39,7 @@ class Wallet:
         return {
             'prikey': self.prikey.json(),
             'pubkey': self.pubkey.json(),
-            'addr': f'0x{self.addr.hex()}',
+            'addr': self.addr.hex(),
         }
 
     def balance(self) -> int:

@@ -26,7 +26,7 @@ class PriKey:
 
     def json(self) -> typing.Dict:
         return {
-            'n': f'0x{self.n:064x}',
+            'n': f'{self.n:064x}',
         }
 
     def pubkey(self):
@@ -79,8 +79,8 @@ class PubKey:
 
     def json(self) -> typing.Dict:
         return {
-            'x': f'0x{self.x:064x}',
-            'y': f'0x{self.y:064x}'
+            'x': f'{self.x:064x}',
+            'y': f'{self.y:064x}'
         }
 
     def pt(self) -> pleth.secp256k1.Pt:
@@ -141,9 +141,9 @@ class TxLegacy:
             'nonce': self.nonce,
             'gas_price': self.gas_price,
             'gas': self.gas,
-            'to': f'0x{self.to.hex()}' if self.to else None,
+            'to': self.to.hex() if self.to else None,
             'value': self.value,
-            'data': f'0x{self.data.hex()}',
+            'data': self.data.hex(),
             'v': self.v,
             'r': self.r,
             's': self.s,
@@ -222,10 +222,10 @@ class TxAccessList:
             'nonce': self.nonce,
             'gas_price': self.gas_price,
             'gas': self.gas,
-            'to': f'0x{self.to.hex()}' if self.to else None,
+            'to': self.to.hex() if self.to else None,
             'value': self.value,
-            'data': f'0x{self.data.hex()}',
-            'access_list': [[f'0x{e[0].hex()}', [f'0x{f.hex()}' for f in e[1]]] for e in self.access_list],
+            'data': self.data.hex(),
+            'access_list': [[e[0].hex(), [f.hex() for f in e[1]]] for e in self.access_list],
             'v': self.v,
             'r': self.r,
             's': self.s,
@@ -309,10 +309,10 @@ class TxDynamicFee:
             'gas_tip_cap': self.gas_tip_cap,
             'gas_fee_cap': self.gas_fee_cap,
             'gas': self.gas,
-            'to': f'0x{self.to.hex()}' if self.to else None,
+            'to': self.to.hex() if self.to else None,
             'value': self.value,
-            'data': f'0x{self.data.hex()}',
-            'access_list': [[f'0x{e[0].hex()}', [f'0x{f.hex()}' for f in e[1]]] for e in self.access_list],
+            'data': self.data.hex(),
+            'access_list': [[e[0].hex(), [f.hex() for f in e[1]]] for e in self.access_list],
             'v': self.v,
             'r': self.r,
             's': self.s,
