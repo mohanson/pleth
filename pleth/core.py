@@ -5,6 +5,7 @@ import pleth.config
 import pleth.ecdsa
 import pleth.rlp
 import pleth.secp256k1
+import secrets
 import typing
 
 
@@ -32,6 +33,10 @@ class PriKey:
     def pubkey(self):
         pubkey = pleth.secp256k1.G * pleth.secp256k1.Fr(self.n)
         return PubKey(pubkey.x.x, pubkey.y.x)
+
+    @classmethod
+    def random(cls) -> typing.Self:
+        return PriKey(max(1, secrets.randbelow(pleth.secp256k1.N)))
 
     def sign(self, data: bytearray) -> bytearray:
         assert len(data) == 32

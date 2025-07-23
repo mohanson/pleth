@@ -18,7 +18,7 @@ if args.net == 'testnet':
     pleth.config.current = pleth.config.testnet
 
 for _ in range(args.limit):
-    prikey = pleth.core.PriKey(random.randint(1, (1 << 256) - 1))
+    prikey = pleth.core.PriKey.random()
     pubkey = prikey.pubkey()
     addr = pubkey.addr()
     number = pleth.rpc.eth_get_balance(f'0x{addr.hex()}', 'latest')

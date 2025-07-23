@@ -1,11 +1,11 @@
 import pleth
-import random
+import secrets
 
 
 def test_sign():
-    prikey = pleth.secp256k1.Fr(random.randint(0, pleth.secp256k1.N - 1))
+    prikey = pleth.secp256k1.Fr(max(1, secrets.randbelow(pleth.secp256k1.N)))
     pubkey = pleth.secp256k1.G * prikey
-    m = pleth.secp256k1.Fr(random.randint(0, pleth.secp256k1.N - 1))
+    m = pleth.secp256k1.Fr(max(1, secrets.randbelow(pleth.secp256k1.N)))
     r, s, v = pleth.ecdsa.sign(prikey, m)
     assert pleth.ecdsa.verify(pubkey, m, r, s)
     assert pleth.ecdsa.pubkey(m, r, s, v) == pubkey
