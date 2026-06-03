@@ -113,10 +113,32 @@ class Tuple:
         return self.slen
 
 
+class Uint8:
+    @classmethod
+    def decode(cls, reader: io.IOBase) -> int:
+        origin = int.from_bytes(pleth.io.read_full(reader, 32), 'big')
+        assert origin >= 0
+        assert origin <= 0xff
+        return origin
+
+    @classmethod
+    def encode(cls, origin: int) -> bytearray:
+        assert origin >= 0
+        assert origin <= 0xff
+        return bytearray(origin.to_bytes(32, 'big'))
+
+    @classmethod
+    def size(cls) -> int:
+        return 32
+
+
 class Uint256:
     @classmethod
     def decode(cls, reader: io.IOBase) -> int:
-        return int.from_bytes(pleth.io.read_full(reader, 32), 'big')
+        origin = int.from_bytes(pleth.io.read_full(reader, 32), 'big')
+        assert origin >= 0
+        assert origin <= 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+        return origin
 
     @classmethod
     def encode(cls, origin: int) -> bytearray:

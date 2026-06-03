@@ -1,4 +1,5 @@
 import json
+import pleth.abi
 import pleth.config
 import pleth.core
 import pleth.denomination
@@ -66,6 +67,50 @@ class Wallet:
         gas = pleth.config.current.gas_base_fee * 100
         tx = pleth.core.TxLegacy(self.nonce(), gas_price, gas, addr, value, data)
         return self.send(tx)
+
+    def erc20_balance(self, addr: bytearray) -> int:
+        func = pleth.abi.function_selector('balanceOf', ['address'])
+        args = pleth.abi.argument_encoding([pleth.abi.Address], [self.addr])
+        data = func + args
+        rets = self.contract_call(addr, data)
+        rets = pleth.abi.argument_decoding([pleth.abi.Uint256], rets)
+        return rets[0]
+
+    def erc20_decimals(self, addr: bytearray) -> int:
+        data = pleth.abi.function_selector('decimals', [])
+        rets = self.contract_call(addr, data)
+        rets = pleth.abi.argument_decoding([pleth.abi.Uint8], rets)
+        return rets[0]
+
+    def erc20_transfer(self, addr: bytearray, to: bytearray, value: int) -> bytearray:
+        func = pleth.abi.function_selector('transfer', ['address', 'uint256'])
+        args = pleth.abi.argument_encoding([pleth.abi.Address, pleth.abi.Uint256], [to, value])
+        return self.contract_exec(addr, 0, func + args)
+
+    def erc20_transfer_all(self, addr: bytearray, to: bytearray) -> bytearray:
+        return self.erc20_transfer(addr, to, self.erc20_balance(addr))
+
+    def erc20_transfer_from(self, addr: bytearray, spender: bytearray, to: bytearray, value: int) -> bytearray:
+        func = pleth.abi.function_selector('transferFrom', ['address', 'address', 'uint256'])
+        args = pleth.abi.argument_encoding(
+            [pleth.abi.Address, pleth.abi.Address, pleth.abi.Uint256],
+            [spender, to, value],
+        )
+        hash = self.contract_exec(addr, 0, func + args)
+        return hash
+
+    def erc20_approve(self, addr: bytearray, spender: bytearray, value: int) -> bytearray:
+        func = pleth.abi.function_selector('approve', ['address', 'uint256'])
+        args = pleth.abi.argument_encoding([pleth.abi.Address, pleth.abi.Uint256], [spender, value])
+        hash = self.contract_exec(addr, 0, func + args)
+        return hash
+
+    def erc20_allowance(self, addr: bytearray, owner: bytearray, spender: bytearray) -> int:
+        func = pleth.abi.function_selector('allowance', ['address', 'address'])
+        args = pleth.abi.argument_encoding([pleth.abi.Address, pleth.abi.Address], [owner, spender])
+        rets = self.contract_call(addr, func + args)
+        rets = pleth.abi.argument_decoding([pleth.abi.Uint256], rets)
+        return rets[0]
 
     def nonce(self) -> int:
         return int(pleth.rpc.eth_get_transaction_count(f'0x{self.addr.hex()}', 'pending'), 0)
