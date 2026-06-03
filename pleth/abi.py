@@ -47,6 +47,16 @@ class Bytes:
         return Uint256.encode(length) + origin + bytearray(padded - length)
 
 
+class String:
+    @classmethod
+    def decode(cls, reader: io.IOBase) -> str:
+        return Bytes.decode(reader).decode()
+
+    @classmethod
+    def encode(cls, origin: str) -> bytearray:
+        return Bytes.encode(bytearray(origin.encode()))
+
+
 class Uint256:
     @classmethod
     def decode(cls, reader: io.IOBase) -> int:
