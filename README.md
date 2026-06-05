@@ -93,6 +93,24 @@ $ python example/transfer.py --prikey 0x1 --to 0x2b5ad5c4795c026514f8317c7a215e2
 # 0xfdeb27f32a21c793562daa8fa2780546e3304620a9925337c7df5e4e9819ef3a
 ```
 
+**example/erc20_balance.py**
+
+Get erc20 token balance by holder address.
+
+```sh
+$ python example/erc20_balance.py --net mainnet --token usdt --addr 0xF977814e90dA44bFA03b6295A0616a897441aceC
+# 19967378226.983707
+```
+
+**example/erc20_transfer.py**
+
+Transfer erc20 token to other.
+
+```sh
+$ python example/erc20_transfer.py --prikey 0x1 --token usdt --to 0x2b5ad5c4795c026514f8317c7a215e218dccd6cf --value 1.25
+# 0x...
+```
+
 ## Test
 
 ```sh

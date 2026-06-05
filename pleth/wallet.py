@@ -134,3 +134,11 @@ class Wallet:
         value = self.balance() - gas * gas_price
         tx = pleth.core.TxLegacy(self.nonce(), gas_price, gas, addr, value, bytearray())
         return self.send(tx)
+
+    @classmethod
+    def view_only(cls, addr: bytearray) -> typing.Self:
+        # View only wallet let you monitor a wallet's balance and activity but you can't send, swap, or sign
+        # transactions.
+        wallet = cls(0)
+        wallet.addr = addr
+        return wallet
