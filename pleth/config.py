@@ -22,7 +22,7 @@ mainnet = pleth.objectdict.ObjectDict({
     'gas_base_fee': 21000,
     'rpc': {
         'url': 'https://eth.drpc.org',
-        'qps': 2,
+        'qps': 1,
     }
 })
 
@@ -32,7 +32,7 @@ testnet = pleth.objectdict.ObjectDict({
     'gas_base_fee': 21000,
     'rpc': {
         'url': 'https://rpc.sepolia.org',
-        'qps': 2,
+        'qps': 1,
     }
 })
 
